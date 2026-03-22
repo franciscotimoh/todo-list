@@ -18,12 +18,6 @@ function createProject(name) {
             complete
         }; 
     }
-    
-    function addTodo() {
-        const { title, desc, urgent, complete } = promptForTodo(); 
-        let todo = createTodo(title, desc, urgent, complete);
-        project.push(todo); 
-    }
 
     function displayTodos() {
         for (const todo of project) {
@@ -31,9 +25,29 @@ function createProject(name) {
         }
     }
 
+    function getProjectName() {
+        return projectName; 
+    }
+    
+    function addTodo() {
+        const { title, desc, urgent, complete } = promptForTodo(); 
+        let todo = createTodo(title, desc, urgent, complete);
+        project.push(todo); 
+    }
+
+    function updateTodo(index) {
+        const { title, desc, urgent, complete } = promptForTodo(); 
+        let updatedTodo = createTodo(title, desc, urgent, complete);
+        project[index] = updatedTodo;
+    }
+
+    function removeTodo(index) {
+        project.splice(index, 1);
+    }
+
     console.log("Project created");
 
-    return { addTodo, displayTodos }; 
+    return { addTodo, updateTodo, removeTodo, displayTodos, getProjectName }; 
 }
 
 export { createProject };
