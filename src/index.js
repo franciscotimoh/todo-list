@@ -1,85 +1,63 @@
+import './styles.css';
+import closeMUI from './icons/close-circle-outline.svg'; 
 import { createProject } from "./project";
+
+const sidebar = document.querySelector(".projects");
+const addProjectButton = document.querySelector(".add-project"); 
 
 let projects = []; 
 
-// Source - https://stackoverflow.com/a/39914235
-// Posted by Dan Dascalescu, modified by community. See post 'Timeline' for change history
-// Retrieved 2026-03-22, License - CC BY-SA 4.0
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-await sleep(10000);
-
 function addProject(projectName) {
     projects.push(createProject(projectName));
+    renderProjectList(); 
 }
 
-addProject("First Project");
+addProjectButton.addEventListener("click", function(e) {
+    const newProjectName = prompt("Enter project name:");
+    addProject(newProjectName); 
+});
+
+addProject("Your Project");
 let currentProject = 0;
 
-function displayProjects() {
+function createProjectElement(projectName) {
+    const projectElement = document.createElement("div");
+    projectElement.classList.add("project");
+    projectElement.textContent = projectName;
+    projectElement.addEventListener("click", checkOutProject);
+    return projectElement; 
+}
+
+function createSidebarItem(projectName) {
+    const sidebarItem = document.createElement("div");
+    sidebarItem.classList.add("sidebar-item");
+    sidebarItem.appendChild(createProjectElement(projectName));
+
+    const removeProjectButton = document.createElement("img");
+    removeProjectButton.classList.add('close');
+    removeProjectButton.src = closeMUI;
+    removeProjectButton.addEventListener("click", removeProject)
+    sidebarItem.appendChild(removeProjectButton); 
+    
+    return sidebarItem; 
+}
+
+function renderProjectList() {
+    sidebar.replaceChildren(); 
     for (const project of projects) {
-        console.log(project.getProjectName());
+        sidebar.appendChild(createSidebarItem(project.getProjectName())); 
     }
 }
 
-function checkOutProject(index) {
+function checkOutProject(e) {
+    const index = [...sidebar.children].indexOf(e.target);
     console.log(`Now leaving ${projects[currentProject].getProjectName()}`);
     currentProject = index;
     console.log(`Now seeing ${projects[currentProject].getProjectName()}`);
 }
 
-function removeProject(index) {
+function removeProject(e) {
+    const index = [...sidebar.children].indexOf(e.target.parentElement);
     projects.splice(index, 1);
+    renderProjectList(); 
 }
-
-
-/* Todo-specific */
-console.log("Adding a todo");
-projects[currentProject].addTodo();
-
-console.log("Adding a todo");
-projects[currentProject].addTodo();
-
-console.log("Adding a todo");
-projects[currentProject].addTodo();
-
-console.log("Displaying todo");
-projects[currentProject].displayTodos();
-
-console.log("Updating todo");
-projects[currentProject].updateTodo(0);
-
-console.log("Displaying todo");
-projects[currentProject].displayTodos();
-
-console.log("Removing todo");
-projects[currentProject].removeTodo(0);
-
-console.log("Displaying todo");
-projects[currentProject].displayTodos();
-
-
-/* Project specific */
-console.log("Adding new project");
-addProject("Second Project");
-
-console.log("Displaying projects");
-displayProjects();
-
-console.log("Check out project 2");
-checkOutProject(1);
-projects[currentProject].addTodo();
-projects[currentProject].displayTodos();
-
-console.log("Go back to project 1");
-checkOutProject(0);
-projects[currentProject].displayTodos();
-
-console.log("Remove project 2");
-removeProject(1);
-displayProjects();
-
-
