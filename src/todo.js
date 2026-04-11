@@ -1,42 +1,44 @@
-function createTodo(title, description, urgent, complete) {
-    let todoTitle = title, todoDesc = description, todoUrgent = urgent, todoComplete = complete; 
-
-    // potentially remove
-
-    function getTodo() {
-        const fullTodo = { todoTitle, todoDesc, todoUrgent, todoComplete };
-        console.log(fullTodo);
-        return { todoTitle, todoDesc, todoUrgent, todoComplete }; 
-    }
-
-    function displayTodo() {
-        console.log(`${todoTitle}, ${todoDesc}, ${todoUrgent ? "Urgent" : "Not Urgent"}, ${todoComplete ? "Complete" : "Incomplete"}`);
-    }
+function createTodo({todoTitle, todoDesc, todoDueDate, todoPriority, todoComplete}) {
+    let title = todoTitle, description = todoDesc, dueDate = todoDueDate, priority = todoPriority, complete = todoComplete;
 
     function setTitle(newTitle) {
-        todoTitle = newTitle;
+        title = newTitle; 
     }
 
-    function setDesc(newDesc) {
-        todoDesc = newDesc;
+    function setDescription(newDesc) {
+        description = newDesc;
     }
 
-    function setUrgent(newUrgent) {
-        todoUrgent = newUrgent;
+    function setDueDate(newDueDate) {
+        dueDate = newDueDate; 
+    }
+
+    function setPriority(newPriority) {
+        priority = newPriority; 
     }
 
     function setComplete(newComplete) {
-        todoComplete = newComplete; 
+        complete = newComplete;
     }
 
-    return {
-        getTodo,
-        displayTodo,
-        setTitle,
-        setDesc,
-        setUrgent,
-        setComplete,
+    function updateTodo({ newTitle, newDesc, newDueDate, newPriority }) {
+        setTitle(newTitle);
+        setDescription(newDesc);
+        setDueDate(newDueDate);
+        setPriority(newPriority);
     }
+
+    function getTodo() {
+        return {
+            title,
+            description,
+            dueDate,
+            priority,
+            complete
+        };
+    }
+
+    return { getTodo, updateTodo, setComplete };
 }
 
-export { createTodo }; 
+export default createTodo; 

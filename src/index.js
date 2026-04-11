@@ -1,63 +1,55 @@
 import './styles.css';
-import closeMUI from './icons/close-circle-outline.svg'; 
-import { createProject } from "./project";
+import createProjectList from './projectList';
+import createProject from './project';
+import createTodo from './todo';
+import initRenderer from './renderer';
 
-const sidebar = document.querySelector(".projects");
-const addProjectButton = document.querySelector(".add-project"); 
+// Create a projectList
+const projectList = createProjectList();
 
-let projects = []; 
+// Create a couple project instances...
+const project1 = createProject({ projectName: "Project 1"});
+const project2 = createProject({ projectName: "Project 2"});
+const project3 = createProject({ projectName: "Project 3"});
 
-function addProject(projectName) {
-    projects.push(createProject(projectName));
-    renderProjectList(); 
+// ...and add them
+projectList.addProject(project1);
+projectList.addProject(project2);
+projectList.addProject(project3); 
+
+// Create some todo instances...
+function generateTodo(i) {
+    const text = "Todo " + String(i);
+    const date = new Date(); 
+    const priorityOptions = ["Low", "Medium", "High"];
+    const priority = priorityOptions[Math.floor(Math.random() * priorityOptions.length)];
+
+    const params = {
+        todoTitle: text,
+        todoDesc: text,
+        todoDueDate: date,
+        todoPriority: priority,
+        todoComplete: false,
+    };
+
+    return createTodo(params); 
 }
 
-addProjectButton.addEventListener("click", function(e) {
-    const newProjectName = prompt("Enter project name:");
-    addProject(newProjectName); 
-});
+const todo1 = generateTodo(1);
+const todo2 = generateTodo(2);
+const todo3 = generateTodo(3);
+const todo4 = generateTodo(4);
+const todo5 = generateTodo(5);
 
-addProject("Your Project");
-let currentProject = 0;
+project1.addTodo(todo1);
+project1.addTodo(todo2);
+project1.addTodo(todo3);
+project2.addTodo(todo4);
+project3.addTodo(todo5);
 
-function createProjectElement(projectName) {
-    const projectElement = document.createElement("div");
-    projectElement.classList.add("project");
-    projectElement.textContent = projectName;
-    projectElement.addEventListener("click", checkOutProject);
-    return projectElement; 
-}
+projectList.setActiveProject(project1);
+console.log(projectList.getProjects()); 
 
-function createSidebarItem(projectName) {
-    const sidebarItem = document.createElement("div");
-    sidebarItem.classList.add("sidebar-item");
-    sidebarItem.appendChild(createProjectElement(projectName));
-
-    const removeProjectButton = document.createElement("img");
-    removeProjectButton.classList.add('close');
-    removeProjectButton.src = closeMUI;
-    removeProjectButton.addEventListener("click", removeProject)
-    sidebarItem.appendChild(removeProjectButton); 
-    
-    return sidebarItem; 
-}
-
-function renderProjectList() {
-    sidebar.replaceChildren(); 
-    for (const project of projects) {
-        sidebar.appendChild(createSidebarItem(project.getProjectName())); 
-    }
-}
-
-function checkOutProject(e) {
-    const index = [...sidebar.children].indexOf(e.target);
-    console.log(`Now leaving ${projects[currentProject].getProjectName()}`);
-    currentProject = index;
-    console.log(`Now seeing ${projects[currentProject].getProjectName()}`);
-}
-
-function removeProject(e) {
-    const index = [...sidebar.children].indexOf(e.target.parentElement);
-    projects.splice(index, 1);
-    renderProjectList(); 
-}
+const renderer = initRenderer(projectList);
+renderer.renderSidebar();
+renderer.renderContent(); 
