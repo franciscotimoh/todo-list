@@ -26,7 +26,12 @@ function createProject({projectName}) {
         return name; 
     }
 
-    return { addTodo, removeTodo, updateProjectName, getTodos, getProjectName };
+    function getTodoById(id) {
+        const returnedTodo = todoList.find(todo => todo.getTodo().id === id);
+        return returnedTodo; 
+    }
+
+    return { addTodo, removeTodo, updateProjectName, getTodos, getProjectName, getTodoById };
 }
 
 export default createProject; 

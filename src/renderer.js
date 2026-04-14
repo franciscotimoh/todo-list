@@ -47,6 +47,8 @@ function initRenderer(projectList) {
         todoItem.appendChild(editTodoButton);
         todoItem.appendChild(removeTodoButton); 
 
+        todoItem.dataset.id = todo.id; 
+
         return todoItem; 
     }
 

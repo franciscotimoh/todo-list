@@ -1,4 +1,5 @@
 function createTodo({todoTitle, todoDesc, todoDueDate, todoPriority, todoComplete}) {
+    const id = crypto.randomUUID(); 
     let title = todoTitle, description = todoDesc, dueDate = todoDueDate, priority = todoPriority, complete = todoComplete;
 
     function setTitle(newTitle) {
@@ -30,6 +31,7 @@ function createTodo({todoTitle, todoDesc, todoDueDate, todoPriority, todoComplet
 
     function getTodo() {
         return {
+            id,
             title,
             description,
             dueDate,
