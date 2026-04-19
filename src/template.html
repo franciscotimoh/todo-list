@@ -16,5 +16,71 @@
         <div id="content">
         </div>
     </div>
+
+    <dialog id="project-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>New Project</h4>
+            </div>
+            <div class="modal-body">
+                <form class="project-name" method="dialog">
+                    <p>
+                        <label>
+                            Project Name:
+                            <input id="project-name" required>
+                        </label>
+                    </p>
+                    <div>
+                        <button type="button" id="cancel-project-name">Cancel</button>
+                        <button>Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog id="todo-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="todo-header"></h4>
+            </div>
+            <div class="modal-body">
+                <form class="todo" method="dialog">
+                    <p>
+                        <label>
+                            Title:
+                            <input class="todo-title" required>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            Description:
+                            <textarea class="todo-desc"></textarea>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            Due Date:
+                            <input type="date" class="todo-date">
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            Priority:
+                            <select name="todo-priority" class="todo-priority">
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </label>
+                    </p>
+                    <div>
+                        <button type="button" id="cancel-todo">Cancel</button>
+                        <button>Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </dialog>
 </body>
 </html>

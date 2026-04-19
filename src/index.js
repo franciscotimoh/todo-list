@@ -4,6 +4,8 @@ import createProject from './project';
 import createTodo from './todo';
 import initRenderer from './renderer';
 
+import { showProjectDialog, showTodoDialog } from './dialog';
+
 // Create a projectList
 const projectList = createProjectList();
 
@@ -53,3 +55,7 @@ console.log(projectList.getProjects());
 const renderer = initRenderer(projectList);
 renderer.renderSidebar();
 renderer.renderContent(); 
+
+// const response = await showProjectDialog();
+const response = await showTodoDialog(); 
+alert(response); 

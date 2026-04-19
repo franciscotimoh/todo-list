@@ -14,9 +14,13 @@ function initRenderer(projectList) {
             const projectName = document.createElement("div");
             projectName.textContent = project.name;
 
-            const removeProjectButton = document.createElement("img"); 
-            removeProjectButton.src = removeIcon;
-            removeProjectButton.classList.add("icon");
+            const removeProjectButton = document.createElement("button");
+            removeProjectButton.type = "button"; 
+            
+            const removeProjectButtonIcon = document.createElement("img"); 
+            removeProjectButtonIcon.src = removeIcon;
+            removeProjectButtonIcon.classList.add("icon");
+            removeProjectButton.appendChild(removeProjectButtonIcon); 
 
             sidebarItem.appendChild(projectName);
             sidebarItem.appendChild(removeProjectButton);
@@ -34,13 +38,21 @@ function initRenderer(projectList) {
         const todoTitle = document.createElement("div");
         todoTitle.textContent = todo.title;
 
-        const editTodoButton = document.createElement("img"); 
-        editTodoButton.src = editIcon; 
-        editTodoButton.classList.add("icon");
+        const editTodoButton = document.createElement("button"); 
+        editTodoButton.type = "button"; 
 
-        const removeTodoButton = document.createElement("img"); 
-        removeTodoButton.src = removeIcon;
-        removeTodoButton.classList.add("icon");
+        const editTodoButtonIcon = document.createElement("img"); 
+        editTodoButtonIcon.src = editIcon; 
+        editTodoButtonIcon.classList.add("icon");
+        editTodoButton.appendChild(editTodoButtonIcon); 
+
+        const removeTodoButton = document.createElement("button");
+        removeTodoButton.type = "button"; 
+
+        const removeTodoButtonIcon = document.createElement("img"); 
+        removeTodoButtonIcon.src = removeIcon;
+        removeTodoButtonIcon.classList.add("icon");
+        removeTodoButton.appendChild(removeTodoButtonIcon);
 
         todoItem.appendChild(checkbox);
         todoItem.appendChild(todoTitle);
