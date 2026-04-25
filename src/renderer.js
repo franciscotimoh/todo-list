@@ -24,6 +24,7 @@ function initRenderer(projectList) {
 
             sidebarItem.appendChild(projectName);
             sidebarItem.appendChild(removeProjectButton);
+            sidebarItem.dataset.id = project.id; 
             projects.appendChild(sidebarItem); 
         }
     }

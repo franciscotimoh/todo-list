@@ -16,12 +16,18 @@ function createProjectList() {
     function getProjects() {
         const allProjects = projectList.map((project) => {
             return {
+                id: project.getProjectId(),
                 name: project.getProjectName(),
                 todos: project.getTodos(),
             };
         });
 
         return allProjects; 
+    }
+
+    function getProjectById(id) {
+        const returnedProject = projectList.find(project => project.getProjectId() === id); 
+        return returnedProject; 
     }
 
     function getActiveProject() {
@@ -32,7 +38,7 @@ function createProjectList() {
         activeProject = project; 
     }
 
-    return { addProject, removeProject, getProjects, getActiveProject, setActiveProject };
+    return { addProject, removeProject, getProjects, getProjectById, getActiveProject, setActiveProject };
 }
 
 export default createProjectList; 
