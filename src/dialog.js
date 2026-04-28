@@ -37,10 +37,10 @@ export function showProjectDialog() {
 export function showTodoDialog(existingTodo) {
     if (existingTodo) {
         todoHeader.textContent = "Edit Todo";
-        todoTitleInput.value = existingTodo.title; 
-        todoDescInput.value = existingTodo.description;
-        todoDateInput.value = existingTodo.dueDate;
-        todoPriorityInput.value = existingTodo.priority; 
+        todoTitleInput.value = existingTodo.todoTitle; 
+        todoDescInput.value = existingTodo.todoDesc;
+        todoDateInput.value = existingTodo.todoDueDate;
+        todoPriorityInput.value = existingTodo.todoPriority; 
     } else {
         todoHeader.textContent = "New Todo"; 
     }
