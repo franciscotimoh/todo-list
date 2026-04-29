@@ -17,17 +17,50 @@ html, body {
 
 /* sidebar */
 #sidebar {
+    box-sizing: border-box;
     width: 300px;
     height: 100%;
-    background-color: #F4F5F7; 
+    background-color: #F4F5F7;
+    padding: 1.5rem;
 }
 
 .sidebar-item {
     display: flex;
-    justify-content: space-between; 
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
 }
 
 .icon {
     width: 1rem;
     height: auto;
 }
+
+button {
+    font-family: "Source Serif 4", serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.25 0rem;
+    background: none;
+    border: none;
+}
+
+button:hover {
+    filter: invert(54%) sepia(44%) saturate(4967%) hue-rotate(330deg) brightness(85%) contrast(103%);
+}
+
+.add-project {
+    margin-bottom: 1.5rem;
+}
+
+.sidebar-project-name:hover {
+    color: #DB4B3F;
+    cursor: pointer;
+}
+
+.active-project {
+    font-weight: bold; 
+}
+

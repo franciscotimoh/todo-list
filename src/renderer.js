@@ -90,10 +90,15 @@ function initRenderer(projectList) {
 
         for (const project of projectList.getProjects()) {
             const sidebarItem = document.createElement("div");
+            sidebarItem.classList.add("sidebar-item");
 
             const projectName = document.createElement("div");
             projectName.textContent = project.name;
             projectName.addEventListener("click", handleSetActiveProject);
+            projectName.classList.add("sidebar-project-name");
+            if (project.id === projectList.getActiveProject().getProjectId()) {
+                projectName.classList.add("active-project");
+            }
 
             const removeProjectButton = document.createElement("button");
             removeProjectButton.type = "button"; 
