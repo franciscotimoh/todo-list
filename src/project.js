@@ -1,6 +1,6 @@
-function createProject({projectName}) {
+function createProject({projectName, projectId}) {
     let todoList = [];
-    const id = crypto.randomUUID(); 
+    const id = projectId ?? crypto.randomUUID(); 
     let name = projectName;
 
     function addTodo(todo) {

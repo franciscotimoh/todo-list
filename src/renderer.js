@@ -3,6 +3,7 @@ import editIcon from './icons/pencil-outline.svg';
 import { showProjectDialog, showTodoDialog } from "./dialog";
 import createProject from "./project";
 import createTodo from "./todo";
+import { save } from './storage'; 
 
 function initRenderer(projectList) {
     const projects = document.querySelector("#sidebar .projects");
@@ -51,7 +52,6 @@ function initRenderer(projectList) {
             return; 
         }
 
-        console.log(todoMetadata); 
         const todo = createTodo(todoMetadata);
         projectList.getActiveProject().addTodo(todo);
         renderContent(); 
@@ -60,7 +60,6 @@ function initRenderer(projectList) {
     async function handleEditTodo(e) {
         const todoItem = e.currentTarget.parentElement; 
         const todo = projectList.getActiveProject().getTodoById(todoItem.dataset.id);
-        console.log(todo.getTodo()); 
         
         const todoMetadata = await showTodoDialog(todo.getTodo());
         if (!todoMetadata) {
@@ -84,9 +83,19 @@ function initRenderer(projectList) {
         projectList.getActiveProject().removeTodo(todo);
         renderContent(); 
     }
+
+    function handleToggleCollapse(e) {
+        const collapseElement = e.currentTarget.parentElement.nextElementSibling;
+        if (collapseElement.classList.contains("hidden")) {
+            collapseElement.classList.remove("hidden"); 
+        } else {
+            collapseElement.classList.add("hidden"); 
+        }
+    }
     
     function renderSidebar() {
         projects.replaceChildren();
+        save(projectList);
 
         for (const project of projectList.getProjects()) {
             const sidebarItem = document.createElement("div");
@@ -96,7 +105,7 @@ function initRenderer(projectList) {
             projectName.textContent = project.name;
             projectName.addEventListener("click", handleSetActiveProject);
             projectName.classList.add("sidebar-project-name");
-            if (project.id === projectList.getActiveProject().getProjectId()) {
+            if (project.id === projectList.getActiveProject()?.getProjectId()) {
                 projectName.classList.add("active-project");
             }
 
@@ -116,61 +125,55 @@ function initRenderer(projectList) {
         }
     }
 
-    function renderTodoDetails(todo) {
-        const detailsContainer = document.createElement("details");
-        const todoSummary = document.createElement("summary");
-        todoSummary.textContent = todo.todoTitle;
-
-        const todoDetails = document.createElement("ul");
-
-        const todoTitle = document.createElement("li");
+    function renderTodoCollapse(todo) {
+        const todoCollapseContainer = document.createElement("div");
+        
+        const todoTitle = document.createElement("div");
         const todoTitleLabel = document.createElement("span");
-        todoTitleLabel.textContent = "Title:";
+        todoTitleLabel.textContent = "Title: ";
         todoTitleLabel.classList.add("details-label");
-        const todoTitleValue = document.createElement("p");
+        const todoTitleValue = document.createElement("span");
         todoTitleValue.textContent = todo.todoTitle;
         todoTitle.appendChild(todoTitleLabel);
         todoTitle.appendChild(todoTitleValue); 
 
-        const todoDesc = document.createElement("li");
+        const todoDesc = document.createElement("div");
         const todoDescLabel = document.createElement("span");
-        todoDescLabel.textContent = "Description:";
+        todoDescLabel.textContent = "Description: ";
         todoDescLabel.classList.add("details-label");
-        const todoDescValue = document.createElement("p");
+        const todoDescValue = document.createElement("span");
         todoDescValue.textContent = todo.todoDesc;
         todoDesc.appendChild(todoDescLabel);
         todoDesc.appendChild(todoDescValue);
 
-        const todoDueDate = document.createElement("li");
+        const todoDueDate = document.createElement("div");
         const todoDueDateLabel = document.createElement("span");
-        todoDueDateLabel.textContent = "Due Date:";
+        todoDueDateLabel.textContent = "Due Date: ";
         todoDueDateLabel.classList.add("details-label");
-        const todoDueDateValue = document.createElement("p");
+        const todoDueDateValue = document.createElement("span");
         todoDueDateValue.textContent = todo.todoDueDate;
         todoDueDate.appendChild(todoDueDateLabel);
         todoDueDate.appendChild(todoDueDateValue); 
 
-        const todoPriority = document.createElement("li");
+        const todoPriority = document.createElement("div");
         const todoPriorityLabel = document.createElement("span");
-        todoPriorityLabel.textContent = "Priority:";
+        todoPriorityLabel.textContent = "Priority: ";
         todoPriorityLabel.classList.add("details-label");
-        const todoPriorityValue = document.createElement("p");
+        const todoPriorityValue = document.createElement("span");
         todoPriorityValue.textContent = todo.todoPriority;
         todoPriority.appendChild(todoPriorityLabel);
-        todoPriority.appendChild(todoPriorityValue); 
+        todoPriority.appendChild(todoPriorityValue);
 
-        todoDetails.appendChild(todoTitle);
-        todoDetails.appendChild(todoDesc);
-        todoDetails.appendChild(todoDueDate);
-        todoDetails.appendChild(todoPriority); 
+        todoCollapseContainer.appendChild(todoTitle);
+        todoCollapseContainer.appendChild(todoDesc);
+        todoCollapseContainer.appendChild(todoDueDate);
+        todoCollapseContainer.appendChild(todoPriority);
 
-        detailsContainer.appendChild(todoSummary);
-        detailsContainer.appendChild(todoDetails); 
-
-        return detailsContainer; 
+        return todoCollapseContainer; 
     }
 
     function renderTodo(todo) {
+        const todoContainer = document.createElement("div"); 
         const todoItem = document.createElement("div");
 
         const checkbox = document.createElement("input");
@@ -178,7 +181,14 @@ function initRenderer(projectList) {
         checkbox.checked = todo.todoComplete;
         checkbox.addEventListener('change', handleToggleComplete);
 
-        const todoDetails = renderTodoDetails(todo); 
+        const todoCollapse = renderTodoCollapse(todo);
+        todoCollapse.classList.add("hidden");
+        todoCollapse.classList.add("todo-collapse"); 
+
+        const todoTitle = document.createElement("span");
+        todoTitle.textContent = todo.todoTitle;
+        todoTitle.classList.add("todo-title"); 
+        todoTitle.addEventListener("click", handleToggleCollapse); 
 
         const editTodoButton = document.createElement("button"); 
         editTodoButton.type = "button"; 
@@ -199,17 +209,23 @@ function initRenderer(projectList) {
         removeTodoButton.appendChild(removeTodoButtonIcon);
 
         todoItem.appendChild(checkbox);
-        todoItem.appendChild(todoDetails);
+        todoItem.appendChild(todoTitle);
         todoItem.appendChild(editTodoButton);
         todoItem.appendChild(removeTodoButton); 
 
-        todoItem.dataset.id = todo.id; 
+        todoItem.dataset.id = todo.id;
 
-        return todoItem; 
+        todoItem.classList.add("todo-item");
+
+        todoContainer.appendChild(todoItem);
+        todoContainer.appendChild(todoCollapse); 
+
+        return todoContainer; 
     }
 
     function renderContent() {
         content.replaceChildren();
+        save(projectList);
         const currentActiveProject = projectList.getActiveProject();
         if (!currentActiveProject) return;
 
@@ -217,13 +233,17 @@ function initRenderer(projectList) {
         projectHeader.textContent = currentActiveProject.getProjectName();
         content.appendChild(projectHeader); 
 
+        const todosContainer = document.createElement("div");
         for (const todo of currentActiveProject.getTodos()) {
             const renderedTodo = renderTodo(todo);
-            content.appendChild(renderedTodo);
+            todosContainer.appendChild(renderedTodo);
         }
+        todosContainer.classList.add("todos-container"); 
+        content.appendChild(todosContainer); 
 
         const addTodoButton = document.createElement("button");
         addTodoButton.textContent = "Add Todo"
+        addTodoButton.classList.add("add-todo"); 
         addTodoButton.addEventListener("click", handleAddTodo)
         content.appendChild(addTodoButton); 
     }
